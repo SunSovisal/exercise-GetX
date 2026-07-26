@@ -1,5 +1,6 @@
 import 'package:cafe_frontend/controller/cart_controller.dart';
 import 'package:cafe_frontend/models/cart_line.dart';
+import 'package:cafe_frontend/views/store_location_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -107,7 +108,12 @@ class HomeScreen extends StatelessWidget {
       ),
       bottomNavigationBar: _BrewNavigation(
         onRewardsTap: onRewardsTap,
-        onOrdersTap: onOrdersTap,
+        onOrdersTap:
+            onOrdersTap ??
+            () => Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => CartScreen()),
+            ),
         onProfileTap: onProfileTap,
       ),
     );
@@ -151,15 +157,15 @@ class HomeScreen extends StatelessWidget {
           ),
           Text('The Brew', style: Theme.of(context).textTheme.headlineSmall),
           IconButton(
-            tooltip: 'Cart',
+            tooltip: 'Location',
             onPressed: () {
               Navigator.of(context).push(
                 MaterialPageRoute<void>(
-                  builder: (context) => const CartScreen(),
+                  builder: (context) => StoreLocationScreen(),
                 ),
               );
             },
-            icon: const Icon(Icons.shopping_bag_outlined),
+            icon: const Icon(Icons.map_outlined),
           ),
         ],
       ),
