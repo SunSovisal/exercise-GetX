@@ -81,7 +81,11 @@ class CartScreen extends StatelessWidget {
           total: cartController.total,
           hasItems: cartController.cart.isNotEmpty,
           onCheckout:
-              onCheckout ?? () => _CheckoutSnackBar(cartController.total),
+              onCheckout ??
+              () {
+                _CheckoutSnackBar(cartController.total);
+                cartController.clear();
+              },
         ),
       ),
     );

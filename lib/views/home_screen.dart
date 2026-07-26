@@ -1,9 +1,14 @@
+import 'package:cafe_frontend/controller/cart_controller.dart';
+import 'package:cafe_frontend/models/cart_line.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import 'cart_screen.dart';
 import 'detail_screen.dart';
 import '../models/product.dart';
 import '../theme/theme.dart';
+
+final cartController = Get.find<CartController>();
 
 class HomeScreen extends StatelessWidget {
   HomeScreen({
@@ -113,7 +118,20 @@ class HomeScreen extends StatelessWidget {
     return _ProductCard(
       product: product,
       onTap: () => _openDetail(context, product),
-      onAdd: () => onAddProduct?.call(product.name),
+      onAdd: () {
+        cartController.addCart(
+          CartLine(
+            product: product,
+            size: 'Medium',
+            ice: 'Regular Ice',
+            milk: 'Whole Milk',
+            quantity: 1,
+            unitPrice: double.parse(product.price.replaceFirst(r'$', '')),
+          ),
+        );
+        _addtoCartSnackBar();
+        onAddProduct?.call(product.name);
+      },
     );
   }
 
@@ -465,4 +483,18 @@ class _NavItem extends StatelessWidget {
       ),
     );
   }
+}
+
+void _addtoCartSnackBar() {
+  Get.snackbar(
+    'Added ',
+    'Click the cart button to place order',
+    snackPosition: SnackPosition.BOTTOM,
+    backgroundColor: AppTheme.primary,
+    colorText: Colors.white,
+    margin: const EdgeInsets.all(16),
+    borderRadius: 12,
+    duration: const Duration(seconds: 3),
+    icon: const Icon(Icons.check_circle_outline, color: Colors.white),
+  );
 }
