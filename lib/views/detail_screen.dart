@@ -42,7 +42,7 @@ class DetailScreen extends StatelessWidget {
 
     final line = CartLine(
       product: product,
-      size: detailController.selectedIce.value,
+      size: detailController.selectedSize.value,
       ice: detailController.selectedIce.value,
       milk: detailController.selectedMilk.value,
       quantity: detailController.quantity.value,
@@ -59,6 +59,8 @@ class DetailScreen extends StatelessWidget {
       '${product.name}',
       duration: Duration(seconds: 3),
     );
+
+    Navigator.pop(context);
   }
 
   @override
