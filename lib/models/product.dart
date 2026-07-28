@@ -33,4 +33,10 @@ const List<Product> catalogProducts = [
     image: 'assets/images/espresso.jpg',
     description: 'A concentrated shot of bold, full-bodied espresso.',
   ),
+  Product(
+    name: 'Iced Americano',
+    price: '\$4',
+    image: 'assets/images/iced_americano.jpg',
+    description: 'it is an americano, isn\'t it',
+  ),
 ];
