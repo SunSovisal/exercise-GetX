@@ -28,7 +28,7 @@ class CartScreen extends StatelessWidget {
         leading: IconButton(
           tooltip: 'Back',
           onPressed: () => Navigator.of(context).pop(),
-          icon: const Icon(Icons.arrow_back),
+          icon:  Icon(Icons.arrow_back_ios_new),
         ),
         title: Text(
           'Cart',

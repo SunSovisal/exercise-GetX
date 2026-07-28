@@ -153,7 +153,7 @@ class HomeScreen extends StatelessWidget {
           IconButton(
             tooltip: 'Back',
             onPressed: () => Navigator.of(context).maybePop(),
-            icon: const Icon(Icons.arrow_back),
+            icon: Icon(Icons.arrow_back_ios_new),
           ),
           Text('The Brew', style: Theme.of(context).textTheme.headlineSmall),
           IconButton(
