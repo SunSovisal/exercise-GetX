@@ -25,43 +25,56 @@ class StoreLocationScreen extends StatelessWidget {
         ),
         centerTitle: true,
       ),
-      body: FlutterMap(
-        options: MapOptions(
-          initialCenter: storeLocation,
-          initialZoom: 10,
-          minZoom: 3,
-          maxZoom: 20,
-        ),
+      body: Column(
         children: [
-          TileLayer(
-            urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-            userAgentPackageName: 'com.example.cafe_frontend',
-          ),
-          MarkerLayer(
-            markers: [
-              Marker(
-                point: storeLocation,
-                width: 42,
-                height: 42,
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: AppTheme.primary,
-                    shape: BoxShape.circle,
-                    border: Border.all(color: Colors.white, width: 1),
-                    boxShadow: AppTheme.floatingShadow,
-                  ),
-                  child: const Icon(
-                    Icons.local_cafe,
-                    color: Colors.white,
-                    size: 20,
-                  ),
-                ),
+          Container(
+            height: 780,
+            width: 500,
+            child: FlutterMap(
+              options: MapOptions(
+                initialCenter: storeLocation,
+                initialZoom: 15,
+                minZoom: 3,
+                maxZoom: 20,
               ),
-            ],
+              children: [
+                TileLayer(
+                  urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                  userAgentPackageName: 'com.example.cafe_frontend',
+                ),
+                MarkerLayer(
+                  markers: [
+                    Marker(
+                      point: storeLocation,
+                      width: 42,
+                      height: 42,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: AppTheme.primary,
+                          shape: BoxShape.circle,
+                          border: Border.all(color: Colors.white, width: 1),
+                          boxShadow: AppTheme.floatingShadow,
+                        ),
+                        child: const Icon(
+                          Icons.local_cafe,
+                          color: Colors.white,
+                          size: 20,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                SimpleAttributionWidget(
+                  source: const Text('OpenStreetMap contributors'),
+                  onTap: openOsm,
+                ),
+              ],
+            ),
           ),
-          SimpleAttributionWidget(
-            source: const Text('OpenStreetMap contributors'),
-            onTap: openOsm,
+          SizedBox(height: 10),
+          Text(
+            'Visit us here',
+            style: Theme.of(context).textTheme.headlineMedium,
           ),
         ],
       ),
