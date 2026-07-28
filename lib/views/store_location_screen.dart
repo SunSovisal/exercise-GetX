@@ -72,10 +72,25 @@ class StoreLocationScreen extends StatelessWidget {
             ),
           ),
           SizedBox(height: 10),
-          TextButton(onPressed: () {}, child: Text('Visit us')),
+          TextButton(
+            onPressed: () {
+              openGoogleMaps();
+            },
+            child: Text('Visit us'),
+          ),
         ],
       ),
     );
+  }
+}
+
+final Uri googleMapsUrl = Uri.parse(
+  'https://www.google.com/maps/search/?api=1&query=11.570863,104.897367',
+);
+
+Future<void> openGoogleMaps() async {
+  if (!await launchUrl(googleMapsUrl, mode: LaunchMode.externalApplication)) {
+    throw Exception('Could not open Google Maps');
   }
 }
 
