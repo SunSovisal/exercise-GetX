@@ -8,8 +8,8 @@ class StoreLocationScreen extends StatelessWidget {
   StoreLocationScreen({super.key});
 
   // coordinated of ETEC
-  LatLng storeLocation = LatLng(11.570863, 104.897367);
-  Uri osmUrl = Uri.parse('https://www.openstreetmap.org/copyright');
+  final LatLng storeLocation = LatLng(11.570863, 104.897367);
+  final Uri osmUrl = Uri.parse('https://www.openstreetmap.org/copyright');
 
   Future<void> openOsm() async {
     await launchUrl(osmUrl);
@@ -72,10 +72,7 @@ class StoreLocationScreen extends StatelessWidget {
             ),
           ),
           SizedBox(height: 10),
-          Text(
-            'Visit us here',
-            style: Theme.of(context).textTheme.headlineMedium,
-          ),
+          TextButton(onPressed: () {}, child: Text('Visit us')),
         ],
       ),
     );
