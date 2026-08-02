@@ -15,12 +15,19 @@ class CartController extends GetxController {
   double get total {
     return subtotal;
   }
+
   void addCart(CartLine line) {
     cart.add(line);
   }
 
   void removeCart(CartLine line) {
     cart.remove(line);
+  }
+
+  void updateCart(int index, CartLine line) {
+    if (index >= 0 && index < cart.length) {
+      cart[index] = line;
+    }
   }
 
   void clear() {

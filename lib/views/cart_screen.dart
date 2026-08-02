@@ -1,5 +1,8 @@
+import 'dart:developer';
+
 import 'package:cafe_frontend/controller/cart_controller.dart';
 import 'package:cafe_frontend/models/cart_line.dart';
+import 'package:cafe_frontend/views/detail_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -54,17 +57,25 @@ class CartScreen extends StatelessWidget {
               ),
               children: [
                 ...cartController.cart.map(
-                  (cart) => Padding(
+                  (cart){
+                    final index = cartController.cart.indexOf(cart);
+                    return Padding(
                     padding: const EdgeInsets.only(bottom: 16),
                     child: _CartLine(
                       cart: cart,
-                      onEdit: () => onEditItem?.call(cart.product.name),
+                      // onEdit: () => onEditItem?.call(cart.product.name),
+                      onEdit: () {
+                        Get.to(DetailScreen(product: cart.product,cartIndex: index,));
+                        log("$index");
+                      },
                       onRemove: () {
                         cartController.removeCart(cart);
                         onRemoveItem?.call(cart.product.name);
+                        log("Delete");
                       },
                     ),
-                  ),
+                  );
+                  }
                 ),
                 const SizedBox(height: 2),
                 _OrderSummary(

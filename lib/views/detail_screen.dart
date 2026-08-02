@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cafe_frontend/controller/cart_controller.dart';
 import 'package:cafe_frontend/controller/detail_controller.dart';
 import 'package:cafe_frontend/models/cart_line.dart';
@@ -7,8 +9,10 @@ import '../models/product.dart';
 import '../theme/theme.dart';
 
 class DetailScreen extends StatelessWidget {
+  final int? cartIndex;
   DetailScreen({
     super.key,
+    this.cartIndex,
     required this.product,
     this.onFavorite,
     this.onAddToOrder,
@@ -63,10 +67,30 @@ class DetailScreen extends StatelessWidget {
     Navigator.pop(context);
   }
 
+  void updateCart(BuildContext context) {
+    final cartController = Get.find<CartController>();
+
+    final line = CartLine(
+      product: product,
+      size: detailController.selectedSize.value,
+      ice: detailController.selectedIce.value,
+      milk: detailController.selectedMilk.value,
+      quantity: detailController.quantity.value,
+      unitPrice: detailController.unitPrice(basePrice),
+    );
+
+    cartController.updateCart(cartIndex!, line);
+
+    Get.snackbar("Updated", "${product.name} updated successfully");
+
+    Navigator.pop(context);
+  }
+
   @override
   Widget build(BuildContext context) {
     // Get.put create and register the controller
     // final detailController = Get.put(DetailController());
+
     return Scaffold(
       body: Center(
         child: ConstrainedBox(
@@ -392,11 +416,25 @@ class DetailScreen extends StatelessWidget {
                         elevation: 0,
                         textStyle: Theme.of(context).textTheme.labelMedium,
                       ),
-                      onPressed: onAddToOrder ?? () => addToCart(context),
+                      // onPressed: onAddToOrder ?? () {log("${cartIndex}");addToCart(context);},
+                      onPressed:
+                          onAddToOrder ??
+                          () {
+                            log("cartIndex: $cartIndex");
+                            if (cartIndex == null) {
+                              addToCart(context);
+                            } else {
+                              updateCart(context);
+                            }
+                          },
 
                       child: Obx(
+                        // () => Text(
+                        //   'Add to Order  •  \$${detailController.totalPrice(basePrice).toStringAsFixed(2)}',
+                        // ),
                         () => Text(
-                          'Add to Order  •  \$${detailController.totalPrice(basePrice).toStringAsFixed(2)}',
+                          '${cartIndex == null ? "Add to Order" : "Update Order"}'
+                          ' • \$${detailController.totalPrice(basePrice).toStringAsFixed(2)}',
                         ),
                       ),
                     ),
