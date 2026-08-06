@@ -26,7 +26,7 @@ class CoffeeApp extends StatelessWidget {
       title: 'The Brew',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,
-      home: HomeScreen(),
+      home: LoginScreen(),
     );
   }
 }

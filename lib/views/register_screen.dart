@@ -38,6 +38,24 @@ class RegisterScreen extends StatelessWidget {
     return null;
   }
 
+  String? _phoneNumberValidator(String? value) {
+    if (value == null || value.trim().isEmpty) {
+      return "Please enter your phone number";
+    }
+
+    // Strip whitespaces for validation
+    final cleanValue = value.trim();
+
+    // Regex to check if it's a valid phone number (optional leading +, followed by 8 to 15 digits)
+    final phoneRegExp = RegExp(r'^\+?[0-9]{8,15}$');
+
+    if (!phoneRegExp.hasMatch(cleanValue)) {
+      return "Please enter a valid phone number with country code (e.g. +14155552671)";
+    }
+
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -86,6 +104,15 @@ class RegisterScreen extends StatelessWidget {
                       icon: Icons.lock_outline,
                       obscure: true,
                     ),
+
+                    const SizedBox(height: 16),
+                    CustomTextField(
+                      validator: _phoneNumberValidator,
+                      controller: phoneController,
+                      hint: "Phone Number",
+                      icon: Icons.call,
+                      obscure: true,
+                    ),
                   ],
                 ),
               ),
@@ -94,11 +121,15 @@ class RegisterScreen extends StatelessWidget {
               CustomButton(
                 text: "Register",
                 onPressed: () async {
-                  if(_formKey.currentState!.validate()){
-                    await authService.register(email: emailController.text.trim(), password: passwordController.text.trim());
+                  if (_formKey.currentState!.validate()) {
+                    await authService.register(
+                      email: emailController.text.trim(),
+                      password: passwordController.text.trim(),
+                    );
                   }
                   emailController.clear();
                   passwordController.clear();
+                  phoneController.clear();
                 },
               ),
             ],

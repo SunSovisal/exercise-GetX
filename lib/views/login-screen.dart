@@ -4,6 +4,7 @@ import 'package:cafe_frontend/services/auth_service.dart';
 import 'package:cafe_frontend/theme/theme.dart';
 import 'package:cafe_frontend/views/home_screen.dart';
 import 'package:cafe_frontend/views/register_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/route_manager.dart';
@@ -34,10 +35,102 @@ class LoginScreen extends StatelessWidget {
     if (value == null || value.isEmpty) {
       return "Please enter your password";
     }
-    if (value.length <7) {
+    if (value.length < 7) {
       return "Password must be at least 8 characters";
     }
     return null;
+  }
+
+  void _showPhoneNumberBottomSheet(BuildContext context) {
+    final TextEditingController phoneController = TextEditingController();
+
+    Get.bottomSheet(
+      Container(
+        padding: const EdgeInsets.all(16),
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Text(
+              "Enter Phone Number",
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 12),
+            TextField(
+              controller: phoneController,
+              keyboardType: TextInputType.phone,
+              decoration: const InputDecoration(
+                hintText: "+855 884533668 (with country code)",
+                border: OutlineInputBorder(),
+              ),
+            ),
+            const SizedBox(height: 16),
+            ElevatedButton(
+              onPressed: () async {
+                final phone = phoneController.text.trim();
+                if (phone.isEmpty) return;
+
+                Get.back(); // Close phone input sheet
+
+                await authService.signInWithPhoneNumber(
+                  phone,
+                  onCodeSent: (String verificationId) {
+                    // Show the OTP screen/dialog when SMS is sent
+                    _showOtpDialog(context, verificationId);
+                  },
+                  onError: (FirebaseAuthException e) {
+                    Get.snackbar("Error", e.message ?? "Phone auth failed");
+                    log("$e");
+                  },
+                );
+              },
+              child: const Text("Send Verification Code"),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _showOtpDialog(BuildContext context, String verificationId) {
+    final TextEditingController otpController = TextEditingController();
+
+    Get.defaultDialog(
+      title: "Enter OTP Code",
+      content: Column(
+        children: [
+          TextField(
+            controller: otpController,
+            keyboardType: TextInputType.number,
+            maxLength: 6,
+            decoration: const InputDecoration(
+              hintText: "6-digit SMS code",
+              border: OutlineInputBorder(),
+            ),
+          ),
+        ],
+      ),
+      textConfirm: "Verify",
+      onConfirm: () async {
+        final code = otpController.text.trim();
+        if (code.length != 6) return;
+
+        final user = await authService.verifySMSCode(
+          verificationId: verificationId,
+          smsCode: code,
+        );
+
+        if (user != null) {
+          Get.back(); // Close OTP dialog
+          Get.offAll(() => HomeScreen()); // Navigate to Home
+        } else {
+          Get.snackbar("Error", "Invalid OTP code");
+        }
+      },
+    );
   }
 
   @override
@@ -96,9 +189,12 @@ class LoginScreen extends StatelessWidget {
               const SizedBox(height: 20),
               CustomButton(
                 text: "Login",
-                onPressed: () async{
-                  if(_formKey.currentState!.validate()){
-                    await authService.login(email: emailController.text.trim(), password: passwordController.text.trim());
+                onPressed: () async {
+                  if (_formKey.currentState!.validate()) {
+                    await authService.login(
+                      email: emailController.text.trim(),
+                      password: passwordController.text.trim(),
+                    );
                   }
                   emailController.clear();
                   passwordController.clear();
@@ -114,14 +210,25 @@ class LoginScreen extends StatelessWidget {
                     text: "Google",
                     image:
                         "https://i.pinimg.com/1200x/45/20/dd/4520ddfc56208707045c56232e946f7f.jpg",
-                    onPressed: () {},
+                    onPressed: () async {
+                      try {
+                        final user = await authService.signInWithGoogle();
+                        if (user != null) {
+                          Get.to(HomeScreen());
+                        }
+                      } catch (e) {
+                        log("$e");
+                      }
+                    },
                   ),
                   SizedBox(width: 10),
                   SocialButton(
                     text: "PhoneNumber",
                     image:
                         "https://i.pinimg.com/736x/1c/12/83/1c1283c73d36bd99f04562c9178a589e.jpg",
-                    onPressed: () {},
+                    onPressed: () {
+                      _showPhoneNumberBottomSheet(context);
+                    },
                   ),
                 ],
               ),
