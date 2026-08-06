@@ -2,12 +2,10 @@ import 'dart:developer';
 
 import 'package:cafe_frontend/services/auth_service.dart';
 import 'package:cafe_frontend/theme/theme.dart';
-import 'package:cafe_frontend/views/login-screen.dart';
+import 'package:cafe_frontend/views/login_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_connect/http/src/utils/utils.dart';
-import 'package:get/state_manager.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -126,19 +124,18 @@ class ProfileScreen extends StatelessWidget {
                 width: double.infinity,
                 height: 56,
                 child: ElevatedButton.icon(
-                  onPressed: () async{
+                  onPressed: () async {
                     log("$isLoggedIn");
                     if (isLoggedIn) {
                       log("signOut");
                       await authService.logout();
                     } else {
                       log("To LoginScreen");
-                      Get.to(()=>LoginScreen());
-                      
+                      Get.to(() => LoginScreen());
                     }
                   },
-                  icon: isLoggedIn? Icon(Icons.logout) : Icon(Icons.login),
-                  label: isLoggedIn? Text("Log out") : Text("Log in"),
+                  icon: isLoggedIn ? Icon(Icons.logout) : Icon(Icons.login),
+                  label: isLoggedIn ? Text("Log out") : Text("Log in"),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppTheme.primary,
                     foregroundColor: Colors.white,

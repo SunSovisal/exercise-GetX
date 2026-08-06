@@ -60,7 +60,7 @@ class DetailScreen extends StatelessWidget {
     // ).push(MaterialPageRoute<void>(builder: (context) => CartScreen()));
     Get.snackbar(
       'Orderd Completed',
-      '${product.name}',
+      product.name,
       duration: Duration(seconds: 3),
     );
 

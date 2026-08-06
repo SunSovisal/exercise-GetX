@@ -1,7 +1,7 @@
 import 'dart:developer';
 
 import 'package:cafe_frontend/views/home_screen.dart';
-import 'package:cafe_frontend/views/login-screen.dart';
+import 'package:cafe_frontend/views/login_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get_navigation/get_navigation.dart';
 import 'package:get/instance_manager.dart';
@@ -10,7 +10,10 @@ import 'package:google_sign_in/google_sign_in.dart';
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  Future<void> register({required email, required password}) async {
+  Future<void> register({
+    required String email,
+    required String password,
+  }) async {
     try {
       await _auth.createUserWithEmailAndPassword(
         email: email,
@@ -22,7 +25,7 @@ class AuthService {
     }
   }
 
-  Future<void> login({required email, required password}) async {
+  Future<void> login({required String email, required String password}) async {
     try {
       await _auth.signInWithEmailAndPassword(email: email, password: password);
       Get.to(HomeScreen());

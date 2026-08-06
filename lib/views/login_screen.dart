@@ -1,14 +1,14 @@
+
 import 'dart:developer';
 
 import 'package:cafe_frontend/services/auth_service.dart';
 import 'package:cafe_frontend/theme/theme.dart';
+import 'package:cafe_frontend/validators/auth_input_validators.dart';
 import 'package:cafe_frontend/views/home_screen.dart';
 import 'package:cafe_frontend/views/register_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/route_manager.dart';
-import 'package:get/state_manager.dart';
 
 class LoginScreen extends StatelessWidget {
   LoginScreen({super.key});
@@ -20,26 +20,6 @@ class LoginScreen extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
 
   final AuthService authService = AuthService();
-
-  String? _emailValidator(String? value) {
-    if (value == null || value.trim().isEmpty) {
-      return "Please enter your email";
-    }
-    if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value.trim())) {
-      return "Please enter a valid email";
-    }
-    return null;
-  }
-
-  String? _passwordValidator(String? value) {
-    if (value == null || value.isEmpty) {
-      return "Please enter your password";
-    }
-    if (value.length < 7) {
-      return "Password must be at least 8 characters";
-    }
-    return null;
-  }
 
   void _showPhoneNumberBottomSheet(BuildContext context) {
     final TextEditingController phoneController = TextEditingController();
@@ -160,7 +140,7 @@ class LoginScreen extends StatelessWidget {
                 child: Column(
                   children: [
                     CustomTextField(
-                      validator: _emailValidator,
+                      validator: validateEmail,
                       controller: emailController,
                       hint: "Email",
                       icon: Icons.email_outlined,
@@ -168,7 +148,7 @@ class LoginScreen extends StatelessWidget {
 
                     const SizedBox(height: 16),
                     CustomTextField(
-                      validator: _passwordValidator,
+                      validator: validateLoginPassword,
                       controller: passwordController,
                       hint: "Password",
                       icon: Icons.lock_outline,

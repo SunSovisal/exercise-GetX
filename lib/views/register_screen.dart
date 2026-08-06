@@ -1,11 +1,8 @@
-import 'dart:developer';
-
 import 'package:cafe_frontend/services/auth_service.dart';
 import 'package:cafe_frontend/theme/theme.dart';
+import 'package:cafe_frontend/validators/auth_input_validators.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/route_manager.dart';
-import 'package:get/state_manager.dart';
 
 class RegisterScreen extends StatelessWidget {
   RegisterScreen({super.key});
@@ -17,44 +14,6 @@ class RegisterScreen extends StatelessWidget {
   final AuthService authService = AuthService();
 
   final _formKey = GlobalKey<FormState>();
-
-  String? _emailValidator(String? value) {
-    if (value == null || value.trim().isEmpty) {
-      return "Please enter your email";
-    }
-    if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value.trim())) {
-      return "Please enter a valid email";
-    }
-    return null;
-  }
-
-  String? _passwordValidator(String? value) {
-    if (value == null || value.isEmpty) {
-      return "Please enter your password";
-    }
-    if (value.length < 7) {
-      return "Password must be at least 8 characters";
-    }
-    return null;
-  }
-
-  String? _phoneNumberValidator(String? value) {
-    if (value == null || value.trim().isEmpty) {
-      return "Please enter your phone number";
-    }
-
-    // Strip whitespaces for validation
-    final cleanValue = value.trim();
-
-    // Regex to check if it's a valid phone number (optional leading +, followed by 8 to 15 digits)
-    final phoneRegExp = RegExp(r'^\+?[0-9]{8,15}$');
-
-    if (!phoneRegExp.hasMatch(cleanValue)) {
-      return "Please enter a valid phone number with country code (e.g. +14155552671)";
-    }
-
-    return null;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -90,7 +49,7 @@ class RegisterScreen extends StatelessWidget {
                 child: Column(
                   children: [
                     CustomTextField(
-                      validator: _emailValidator,
+                      validator: validateEmail,
                       controller: emailController,
                       hint: "Email",
                       icon: Icons.email_outlined,
@@ -98,7 +57,7 @@ class RegisterScreen extends StatelessWidget {
 
                     const SizedBox(height: 16),
                     CustomTextField(
-                      validator: _passwordValidator,
+                      validator: validateRegistrationPassword,
                       controller: passwordController,
                       hint: "Password",
                       icon: Icons.lock_outline,
@@ -107,7 +66,7 @@ class RegisterScreen extends StatelessWidget {
 
                     const SizedBox(height: 16),
                     CustomTextField(
-                      validator: _phoneNumberValidator,
+                      validator: validatePhoneNumber,
                       controller: phoneController,
                       hint: "Phone Number",
                       icon: Icons.call,
