@@ -1,4 +1,3 @@
-
 import 'dart:developer';
 
 import 'package:cafe_frontend/services/auth_service.dart';
@@ -62,7 +61,19 @@ class LoginScreen extends StatelessWidget {
                     _showOtpDialog(context, verificationId);
                   },
                   onError: (FirebaseAuthException e) {
-                    Get.snackbar("Error", e.message ?? "Phone auth failed");
+                    Get.snackbar(
+                      "Error",
+                      e.message ?? "Phone auth failed",
+                      backgroundColor: AppTheme.primary,
+                      colorText: Colors.white,
+                      margin: const EdgeInsets.all(16),
+                      borderRadius: 12,
+                      duration: const Duration(seconds: 3),
+                      icon: const Icon(
+                        Icons.check_circle_outline,
+                        color: Colors.white,
+                      ),
+                    );
                     log("$e");
                   },
                 );
@@ -107,7 +118,16 @@ class LoginScreen extends StatelessWidget {
           Get.back(); // Close OTP dialog
           Get.offAll(() => HomeScreen()); // Navigate to Home
         } else {
-          Get.snackbar("Error", "Invalid OTP code");
+          Get.snackbar(
+            "Error",
+            "Invalid OTP code",
+            backgroundColor: AppTheme.primary,
+            colorText: Colors.white,
+            margin: const EdgeInsets.all(16),
+            borderRadius: 12,
+            duration: const Duration(seconds: 3),
+            icon: const Icon(Icons.check_circle_outline, color: Colors.white),
+          );
         }
       },
     );
@@ -219,7 +239,7 @@ class LoginScreen extends StatelessWidget {
                   const Text("Don't have an account?"),
                   TextButton(
                     onPressed: () {
-                      Get.to(RegisterScreen());
+                      Get.to(() => RegisterScreen());
                     },
                     child: const Text("Register"),
                   ),

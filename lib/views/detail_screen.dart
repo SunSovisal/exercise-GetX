@@ -61,7 +61,12 @@ class DetailScreen extends StatelessWidget {
     Get.snackbar(
       'Orderd Completed',
       product.name,
-      duration: Duration(seconds: 3),
+      duration: Duration(seconds: 1),
+      backgroundColor: AppTheme.primary,
+      colorText: Colors.white,
+      margin: const EdgeInsets.all(16),
+      borderRadius: 12,
+      icon: const Icon(Icons.check_circle_outline, color: Colors.white),
     );
 
     Navigator.pop(context);
@@ -81,7 +86,16 @@ class DetailScreen extends StatelessWidget {
 
     cartController.updateCart(cartIndex!, line);
 
-    Get.snackbar("Updated", "${product.name} updated successfully");
+    Get.snackbar(
+      "Updated",
+      "${product.name} updated successfully",
+      backgroundColor: AppTheme.primary,
+      colorText: Colors.white,
+      margin: const EdgeInsets.all(16),
+      borderRadius: 12,
+      duration: const Duration(seconds: 1),
+      icon: const Icon(Icons.check_circle_outline, color: Colors.white),
+    );
 
     Navigator.pop(context);
   }

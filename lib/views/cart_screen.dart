@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:cafe_frontend/controller/cart_controller.dart';
 import 'package:cafe_frontend/models/cart_line.dart';
 import 'package:cafe_frontend/views/detail_screen.dart';
+import 'package:cafe_frontend/views/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -375,7 +376,7 @@ void _checkoutSnackBar(double total) {
   Get.snackbar(
     'Order Placed',
     "Your order total is \$${total.toStringAsFixed(2)}",
-    snackPosition: SnackPosition.BOTTOM,
+    snackPosition: SnackPosition.TOP,
     backgroundColor: AppTheme.primary,
     colorText: Colors.white,
     margin: const EdgeInsets.all(16),
@@ -383,4 +384,6 @@ void _checkoutSnackBar(double total) {
     duration: const Duration(seconds: 3),
     icon: const Icon(Icons.check_circle_outline, color: Colors.white),
   );
+
+  Get.offAll(() => HomeScreen());
 }

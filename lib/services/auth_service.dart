@@ -19,7 +19,7 @@ class AuthService {
         email: email,
         password: password,
       );
-      Get.to(LoginScreen());
+      Get.offAll(() => LoginScreen());
     } catch (e) {
       log("$e");
     }
@@ -28,7 +28,7 @@ class AuthService {
   Future<void> login({required String email, required String password}) async {
     try {
       await _auth.signInWithEmailAndPassword(email: email, password: password);
-      Get.to(HomeScreen());
+      Get.offAll(() => HomeScreen());
     } catch (e) {
       log("$e");
     }
@@ -37,7 +37,7 @@ class AuthService {
   Future<void> logout() async {
     try {
       await _auth.signOut();
-      Get.offAll(LoginScreen());
+      Get.offAll(() => LoginScreen());
     } catch (e) {
       log("$e");
     }
@@ -68,7 +68,7 @@ class AuthService {
       return await FirebaseAuth.instance.signInWithCredential(credential);
     } catch (e, stackTrace) {
       log("Error during Google Sign-In: $e", stackTrace: stackTrace);
-      return null; // Ensures the function always returns a value
+      return null; 
     }
   }
 

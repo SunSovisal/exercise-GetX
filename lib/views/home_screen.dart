@@ -30,8 +30,6 @@ class HomeScreen extends StatelessWidget {
   final VoidCallback? onOrdersTap;
   final VoidCallback? onProfileTap;
 
-  
-
   final List<String> _categories = [
     'All',
     'Espresso-based',
@@ -155,27 +153,28 @@ class HomeScreen extends StatelessWidget {
         horizontal: AppTheme.pagePadding,
         vertical: 8,
       ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          IconButton(
-            tooltip: 'Back',
-            onPressed: () => Navigator.of(context).maybePop(),
-            icon: Icon(Icons.arrow_back_ios_new),
-          ),
-          Text('The Brew', style: Theme.of(context).textTheme.headlineSmall),
-          IconButton(
-            tooltip: 'Location',
-            onPressed: () {
-              Navigator.of(context).push(
-                MaterialPageRoute<void>(
-                  builder: (context) => StoreLocationScreen(),
-                ),
-              );
-            },
-            icon: const Icon(Icons.map_outlined),
-          ),
-        ],
+      child: SizedBox(
+        height: 48,
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            Text('The Brew', style: Theme.of(context).textTheme.headlineMedium),
+            Align(
+              alignment: Alignment.centerRight,
+              child: IconButton(
+                tooltip: 'Location',
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute<void>(
+                      builder: (context) => StoreLocationScreen(),
+                    ),
+                  );
+                },
+                icon: const Icon(Icons.map_outlined),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -503,12 +502,12 @@ void _addtoCartSnackBar() {
   Get.snackbar(
     'Added ',
     'Click the cart button to place order',
-    snackPosition: SnackPosition.BOTTOM,
+    snackPosition: SnackPosition.TOP,
     backgroundColor: AppTheme.primary,
     colorText: Colors.white,
     margin: const EdgeInsets.all(16),
     borderRadius: 12,
-    duration: const Duration(seconds: 3),
+    duration: const Duration(seconds: 1),
     icon: const Icon(Icons.check_circle_outline, color: Colors.white),
   );
 }
