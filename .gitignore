@@ -33,6 +33,9 @@ migrate_working_dir/
 /build/
 /coverage/
 
+# Xcode project-local SwiftPM state (workspace lockfiles are committed)
+**/*.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved
+
 # Symbolication related
 app.*.symbols
 

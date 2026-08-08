@@ -31,7 +31,7 @@ class CartScreen extends StatelessWidget {
         leading: IconButton(
           tooltip: 'Back',
           onPressed: () => Navigator.of(context).pop(),
-          icon:  Icon(Icons.arrow_back_ios_new),
+          icon: Icon(Icons.arrow_back_ios_new),
         ),
         title: Text(
           'Cart',
@@ -56,16 +56,17 @@ class CartScreen extends StatelessWidget {
                 112,
               ),
               children: [
-                ...cartController.cart.map(
-                  (cart){
-                    final index = cartController.cart.indexOf(cart);
-                    return Padding(
+                ...cartController.cart.map((cart) {
+                  final index = cartController.cart.indexOf(cart);
+                  return Padding(
                     padding: const EdgeInsets.only(bottom: 16),
                     child: _CartLine(
                       cart: cart,
                       // onEdit: () => onEditItem?.call(cart.product.name),
                       onEdit: () {
-                        Get.to(DetailScreen(product: cart.product,cartIndex: index,));
+                        Get.to(
+                          DetailScreen(product: cart.product, cartIndex: index),
+                        );
                         log("$index");
                       },
                       onRemove: () {
@@ -75,8 +76,7 @@ class CartScreen extends StatelessWidget {
                       },
                     ),
                   );
-                  }
-                ),
+                }),
                 const SizedBox(height: 2),
                 _OrderSummary(
                   subtotal: cartController.subtotal,
@@ -94,7 +94,7 @@ class CartScreen extends StatelessWidget {
           onCheckout:
               onCheckout ??
               () {
-                _CheckoutSnackBar(cartController.total);
+                _checkoutSnackBar(cartController.total);
                 cartController.clear();
               },
         ),
@@ -371,7 +371,7 @@ class _CheckoutBar extends StatelessWidget {
   }
 }
 
-void _CheckoutSnackBar(double total) {
+void _checkoutSnackBar(double total) {
   Get.snackbar(
     'Order Placed',
     "Your order total is \$${total.toStringAsFixed(2)}",

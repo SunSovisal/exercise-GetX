@@ -1,12 +1,29 @@
+import 'package:cafe_frontend/controller/cart_controller.dart';
+import 'package:cafe_frontend/theme/theme.dart';
 import 'package:cafe_frontend/views/detail_screen.dart';
-import 'package:cafe_frontend/main.dart';
+import 'package:cafe_frontend/views/home_screen.dart';
 import 'package:cafe_frontend/models/product.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:get/get.dart';
 
 void main() {
+  setUpAll(() {
+    Get.put(CartController(), permanent: true);
+  });
+
+  setUp(() {
+    Get.find<CartController>().clear();
+  });
+
+  tearDownAll(() {
+    Get.reset();
+  });
+
   testWidgets('renders the coffee home screen', (tester) async {
-    await tester.pumpWidget(const CoffeeApp());
+    await tester.pumpWidget(
+      GetMaterialApp(theme: AppTheme.lightTheme, home: HomeScreen()),
+    );
     await tester.pumpAndSettle();
 
     expect(find.text('The Brew'), findsOneWidget);
@@ -22,7 +39,9 @@ void main() {
   });
 
   testWidgets('opens the selected product details', (tester) async {
-    await tester.pumpWidget(const CoffeeApp());
+    await tester.pumpWidget(
+      GetMaterialApp(theme: AppTheme.lightTheme, home: HomeScreen()),
+    );
     await tester.pumpAndSettle();
 
     await tester.drag(
@@ -64,11 +83,11 @@ void main() {
     expect(selectedSize, 'Large');
   });
 
-  testWidgets('detail top bar stays fixed while content scrolls', (tester) async {
+  testWidgets('detail top bar stays fixed while content scrolls', (
+    tester,
+  ) async {
     await tester.pumpWidget(
-      MaterialApp(
-        home: DetailScreen(product: catalogProducts.first),
-      ),
+      MaterialApp(home: DetailScreen(product: catalogProducts.first)),
     );
 
     final backButton = find.byTooltip('Back');

@@ -1,5 +1,6 @@
 import 'package:cafe_frontend/controller/cart_controller.dart';
 import 'package:cafe_frontend/models/cart_line.dart';
+import 'package:cafe_frontend/views/profile_screen.dart';
 import 'package:cafe_frontend/views/store_location_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -28,6 +29,8 @@ class HomeScreen extends StatelessWidget {
   final VoidCallback? onRewardsTap;
   final VoidCallback? onOrdersTap;
   final VoidCallback? onProfileTap;
+
+  
 
   final List<String> _categories = [
     'All',
@@ -114,7 +117,12 @@ class HomeScreen extends StatelessWidget {
               context,
               MaterialPageRoute(builder: (context) => CartScreen()),
             ),
-        onProfileTap: onProfileTap,
+        onProfileTap:
+            onProfileTap ??
+            () => Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => ProfileScreen()),
+            ),
       ),
     );
   }

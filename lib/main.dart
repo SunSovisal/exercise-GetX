@@ -1,13 +1,16 @@
 import 'package:cafe_frontend/controller/cart_controller.dart';
+import 'package:cafe_frontend/views/login_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/instance_manager.dart';
 import 'package:get/route_manager.dart';
-
-import 'views/home_screen.dart';
 import 'theme/theme.dart';
 
-void main() {
-  // CartController need to be alive for the hold app session 
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  await FirebaseAuth.instance.signOut();
   Get.put(CartController(), permanent: true);
   runApp(const CoffeeApp());
 }
@@ -21,7 +24,7 @@ class CoffeeApp extends StatelessWidget {
       title: 'The Brew',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,
-      home: HomeScreen(),
+      home: LoginScreen(),
     );
   }
 }
