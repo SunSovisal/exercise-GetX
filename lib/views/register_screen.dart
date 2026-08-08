@@ -1,6 +1,7 @@
 import 'package:cafe_frontend/services/auth_service.dart';
 import 'package:cafe_frontend/theme/theme.dart';
 import 'package:cafe_frontend/validators/auth_input_validators.dart';
+import 'package:cafe_frontend/widgets/auth/auth_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
 
@@ -48,7 +49,7 @@ class RegisterScreen extends StatelessWidget {
                 key: _formKey,
                 child: Column(
                   children: [
-                    CustomTextField(
+                    AuthTextField(
                       validator: validateEmail,
                       controller: emailController,
                       hint: "Email",
@@ -56,28 +57,28 @@ class RegisterScreen extends StatelessWidget {
                     ),
 
                     const SizedBox(height: 16),
-                    CustomTextField(
+                    AuthTextField(
                       validator: validateRegistrationPassword,
                       controller: passwordController,
                       hint: "Password",
                       icon: Icons.lock_outline,
-                      obscure: true,
+                      obscureText: true,
                     ),
 
                     const SizedBox(height: 16),
-                    CustomTextField(
+                    AuthTextField(
                       validator: validatePhoneNumber,
                       controller: phoneController,
                       hint: "Phone Number",
                       icon: Icons.call,
-                      obscure: true,
+                      keyboardType: TextInputType.phone,
                     ),
                   ],
                 ),
               ),
 
               const SizedBox(height: 20),
-              CustomButton(
+              AuthPrimaryButton(
                 text: "Register",
                 onPressed: () async {
                   if (_formKey.currentState!.validate()) {
@@ -94,89 +95,6 @@ class RegisterScreen extends StatelessWidget {
             ],
           ),
         ),
-      ),
-    );
-  }
-}
-
-class AuthHeader extends StatelessWidget {
-  final String title;
-  final String subtitle;
-
-  const AuthHeader({super.key, required this.title, required this.subtitle});
-
-  @override
-  Widget build(BuildContext context) {
-    final text = Theme.of(context).textTheme;
-
-    return Column(
-      children: [
-        const Icon(Icons.coffee, size: 60, color: Color(0xFF25160E)),
-        const SizedBox(height: 16),
-        Text("The Brew", style: text.headlineMedium),
-        const SizedBox(height: 24),
-        Text(title, style: text.displayMedium, textAlign: TextAlign.center),
-        const SizedBox(height: 10),
-        Text(subtitle, style: text.bodyMedium, textAlign: TextAlign.center),
-      ],
-    );
-  }
-}
-
-class CustomTextField extends StatelessWidget {
-  final TextEditingController controller;
-  final String hint;
-  final IconData icon;
-  final bool obscure;
-  final Widget? suffixIcon;
-  final String? Function(String?)? validator;
-
-  const CustomTextField({
-    super.key,
-    required this.controller,
-    required this.hint,
-    required this.icon,
-    this.obscure = false,
-    this.suffixIcon,
-    this.validator,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return TextFormField(
-      validator: validator,
-      controller: controller,
-      obscureText: obscure,
-      decoration: InputDecoration(
-        hintText: hint,
-        prefixIcon: Icon(icon),
-        suffixIcon: suffixIcon,
-      ),
-    );
-  }
-}
-
-class CustomButton extends StatelessWidget {
-  final String text;
-  final VoidCallback onPressed;
-
-  const CustomButton({super.key, required this.text, required this.onPressed});
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: double.infinity,
-      height: 56,
-      child: ElevatedButton(
-        onPressed: onPressed,
-        style: ElevatedButton.styleFrom(
-          backgroundColor: AppTheme.primary,
-          foregroundColor: Colors.white,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(18),
-          ),
-        ),
-        child: Text(text),
       ),
     );
   }
