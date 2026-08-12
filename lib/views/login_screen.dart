@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:cafe_frontend/services/auth_service.dart';
 import 'package:cafe_frontend/theme/theme.dart';
 import 'package:cafe_frontend/validators/auth_input_validators.dart';
+import 'package:cafe_frontend/views/forgot_password_screen.dart';
 import 'package:cafe_frontend/views/home_screen.dart';
 import 'package:cafe_frontend/views/register_screen.dart';
 import 'package:cafe_frontend/widgets/auth/auth_widgets.dart';
@@ -182,7 +183,9 @@ class LoginScreen extends StatelessWidget {
               Align(
                 alignment: Alignment.centerRight,
                 child: TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Get.to(()=>ForgotPasswordScreen());
+                  },
                   child: const Text("Forgot Password?"),
                 ),
               ),
