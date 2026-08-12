@@ -32,12 +32,37 @@ class HomeScreen extends StatelessWidget {
 
   final List<String> _categories = [
     'All',
-    'Espresso-based',
-    'Frappes',
-    'Pastries',
-    'Teas',
-    'Cake',
+    'Iced Drinks',
+    'Hot Drinks',
+    'Frappe',
   ];
+
+  final searchQuery = ''.obs;
+  final selectedCategory = 'All'.obs;
+
+  List<Product> get filteredProducts {
+    final query = searchQuery.value.trim().toLowerCase();
+    final category = selectedCategory.value;
+
+    return catalogProducts.where((product) {
+      final matchingSearch =
+          query.isEmpty ||
+          product.name.toLowerCase().contains(query) ||
+          product.description.toLowerCase().contains(query);
+      final matchingCategory =
+          category == 'All' || product.category == category;
+
+      return matchingSearch && matchingCategory;
+    }).toList();
+  }
+
+  void updateSearch(String value) {
+    searchQuery.value = value;
+  }
+
+  void selectCategory(String category) {
+    selectedCategory.value = category;
+  }
 
   void _openDetail(BuildContext context, Product product) {
     Navigator.of(context).push(
@@ -81,27 +106,41 @@ class HomeScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-                SliverPadding(
-                  padding: const EdgeInsets.fromLTRB(
-                    AppTheme.pagePadding,
-                    0,
-                    AppTheme.pagePadding,
-                    28,
-                  ),
-                  sliver: SliverGrid(
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          mainAxisSpacing: AppTheme.itemGap,
-                          crossAxisSpacing: AppTheme.itemGap,
-                          childAspectRatio: 0.73,
+                Obx(() {
+                  final products = filteredProducts;
+
+                  if (products.isEmpty) {
+                    return const SliverToBoxAdapter(
+                      child: Center(
+                        child: Padding(
+                          padding: EdgeInsets.all(32),
+                          child: Text('No products found'),
                         ),
-                    delegate: SliverChildBuilderDelegate(
-                      _buildProductCard,
-                      childCount: catalogProducts.length,
+                      ),
+                    );
+                  }
+
+                  return SliverPadding(
+                    padding: const EdgeInsets.fromLTRB(
+                      AppTheme.pagePadding,
+                      0,
+                      AppTheme.pagePadding,
+                      28,
                     ),
-                  ),
-                ),
+                    sliver: SliverGrid(
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            mainAxisSpacing: AppTheme.itemGap,
+                            crossAxisSpacing: AppTheme.itemGap,
+                            childAspectRatio: 0.73,
+                          ),
+                      delegate: SliverChildBuilderDelegate((context, index) {
+                        return _buildProductCard(context, products[index]);
+                      }, childCount: products.length),
+                    ),
+                  );
+                }),
               ],
             ),
           ),
@@ -125,8 +164,7 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildProductCard(BuildContext context, int index) {
-    final product = catalogProducts[index];
+  Widget _buildProductCard(BuildContext context, Product product) {
     return _ProductCard(
       product: product,
       onTap: () => _openDetail(context, product),
@@ -201,7 +239,10 @@ class HomeScreen extends StatelessWidget {
         const SizedBox(height: 16),
         TextField(
           key: const Key('coffee_search_field'),
-          onChanged: onSearchChanged,
+          onChanged: (value) {
+            updateSearch(value);
+            onSearchChanged?.call(value);
+          },
           decoration: const InputDecoration(
             hintText: 'What are you craving?',
             prefixIcon: Icon(Icons.search, size: 20),
@@ -277,35 +318,46 @@ class HomeScreen extends StatelessWidget {
   Widget _buildCategories(BuildContext context) {
     return SizedBox(
       height: 34,
-      child: ListView.separated(
-        scrollDirection: Axis.horizontal,
-        itemCount: _categories.length,
-        separatorBuilder: (_, _) => const SizedBox(width: 10),
-        itemBuilder: (context, index) {
-          final category = _categories[index];
-          final selected = index == 0;
-          return InkWell(
-            borderRadius: BorderRadius.circular(999),
-            onTap: () => onCategorySelected?.call(category),
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 11),
-              decoration: BoxDecoration(
-                color: selected
-                    ? AppTheme.primary
-                    : AppTheme.secondaryContainer,
-                borderRadius: BorderRadius.circular(999),
-              ),
-              child: Text(
-                category,
-                style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                  color: selected ? Colors.white : AppTheme.onSurfaceVariant,
-                  letterSpacing: 0,
+      child: Obx(() {
+        final currentCategory = selectedCategory.value;
+
+        return ListView.separated(
+          scrollDirection: Axis.horizontal,
+          itemCount: _categories.length,
+          separatorBuilder: (_, _) => const SizedBox(width: 10),
+          itemBuilder: (context, index) {
+            final category = _categories[index];
+            final selected = currentCategory == category;
+
+            return InkWell(
+              borderRadius: BorderRadius.circular(999),
+              onTap: () {
+                selectCategory(category);
+                onCategorySelected?.call(category);
+              },
+              child: Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 14,
+                  vertical: 11,
+                ),
+                decoration: BoxDecoration(
+                  color: selected
+                      ? AppTheme.primary
+                      : AppTheme.secondaryContainer,
+                  borderRadius: BorderRadius.circular(999),
+                ),
+                child: Text(
+                  category,
+                  style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                    color: selected ? Colors.white : AppTheme.onSurfaceVariant,
+                    letterSpacing: 0,
+                  ),
                 ),
               ),
-            ),
-          );
-        },
-      ),
+            );
+          },
+        );
+      }),
     );
   }
 }
